@@ -62,6 +62,17 @@ app.get('/voteson/:district_name', (req, res) => {
   });
 });
 
+app.get('/top10', (req, res) => {
+  District.find({}).sort('-hot').limit(10).exec((err, districts) => {
+    if (err) {
+      return res.json(err);
+    }
+    res.render('top10', {
+      districts: districts
+    });
+  });
+});
+
 app.get('/set/:district_name', (req, res) => {
   District.findOne({ filename: req.params.district_name }, (err, district) => {
     if (err) {
