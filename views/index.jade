@@ -1,5 +1,22 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
+		img#myImage(src='/images/bakeoff.jpg', style='width:300px;height:300px;')
+		br
+		button(type='button', onclick='onHotClick()') HOT
+		p
+			| Clicks: 
+			a#hotClicks 0
+		button(type='button', onclick='onNotClick()') NOT
+		p
+			| Clicks: 
+			a#notClicks 0
+		center
+			br
+			font(size='+2')
+				a(href=' ')  Refresh 
+			br
+			br
+			| Back to 
+			a(href='http://www.math.mcgill.ca/abarnatan')  homepage 
+
