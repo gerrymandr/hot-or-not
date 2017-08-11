@@ -1,19 +1,27 @@
 extends layout
 
 block content
-    img#myImage(src='/images/bakeoff.jpg', style='width:300px;height:300px;')
-    br
+    center
+      h3 Hot or Not Districts
+      img#myImage(src='/images/bakeoff.jpg', style='width:300px;height:300px;')
+      br
     .row
+      .col-sm-2
       .col-sm-4
-        button#hotClicker.btn.btn-default(type='button', onclick='onHotClick()') HOT
-        p
-          | Clicks:
-          a#hotClicks 0
+        center
+          button#hotClicker.btn.btn-default(type='button', onclick='onHotClick()') HOT
+          p
+            | Clicks:
+            a#hotClicks 0
       .col-sm-4
-        button#notClicker.btn.btn-default(type='button', onclick='onNotClick()') NOT
-        p
-          | Clicks:
-          a#notClicks 0
+        center
+          button#notClicker.btn.btn-default(type='button', onclick='onNotClick()') NOT
+          p
+            | Clicks:
+            a#notClicks 0
     center
       br
       a(href="/About.html") About page
+      br
+      br
+      a(href="https://github.com/gerrymandr/hot-or-not") Open Source Code

@@ -63,13 +63,10 @@ app.get('/voteson/:district_name', (req, res) => {
 });
 
 app.get('/set/:district_name', (req, res) => {
-  console.log('setting');
   District.findOne({ filename: req.params.district_name }, (err, district) => {
-    console.log('checking if found');
     if (err) {
       return res.json(err);
     }
-    console.log('has district? ' + district);
     if (district) {
       if (req.query.hot) {
         district.hot++;
