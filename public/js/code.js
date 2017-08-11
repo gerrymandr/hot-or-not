@@ -12,9 +12,7 @@ function loadRandomFromList() {
     show_image('/images/' + selected, 200, 200, "Google");
     document.getElementById("hotClicker").disabled = false;
     document.getElementById("notClicker").disabled = false;
-    $.get("/voteson/" + selected, function(b) {
-      var json = JSON.parse(b);
-      console.log(json);
+    $.get("/voteson/" + selected, function(json) {
         document.getElementById("hotClicks").innerHTML = json[0];
         document.getElementById("notClicks").innerHTML = json[1];
       });
