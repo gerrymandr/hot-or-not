@@ -4,9 +4,21 @@ function writeLine(fontSize, text) {
             '</p>');
 }
 
+var selected;
 function loadRandomFromList() {
-    var selected = geoidList[Math.floor(Math.random() * geoidList.length)];
+    //document.getElementById("hotClicks").attri = false;
+    //document.getElementById("notClicks").disabled = false;
+    selected = geoidList[Math.floor(Math.random() * geoidList.length)];
     show_image('/images/' + selected, 200, 200, "Google");
+    document.getElementById("hotClicker").disabled = false;
+    document.getElementById("notClicker").disabled = false;
+    fetch("/voteson/" + selected)
+      .then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        document.getElementById("hotClicks").innerHTML = json[0];
+        document.getElementById("notClicks").innerHTML = json[1];
+      });
 }
 
 function show_image(src, width, height, alt) {
@@ -16,26 +28,30 @@ function show_image(src, width, height, alt) {
     img.height = height;
     img.alt = alt;
 }
-function show_rand_image(){
-    var distName = randomFromList(geoidList);
-    // var distPath = "C:\\\Users\\assaf\\Documents\\_Summer_2017\\Hackathon\\"+ distName + ".jpg";
-    var distPath = '/images/bakeoff.jpg';
-    show_image(distPath, 200, 200, "Google");
-}
-
-var hotClicks = 0;
-var notClicks = 0;
 
 function onHotClick() {
-    console.log('hot');
-    hotClicks += 1;
-    document.getElementById("hotClicks").innerHTML = hotClicks;
-    loadRandomFromList();
+  document.getElementById("hotClicker").disabled = true;
+  document.getElementById("notClicker").disabled = true;
+    document.getElementById("hotClicks").innerHTML = (document.getElementById("hotClicks").innerHTML * 1 + 1);
+    fetch("/set/" + selected + "?hot=1")
+      .then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        //console.log(json);
+      });
+    setTimeout(loadRandomFromList, 350);
 };
 function onNotClick() {
-    notClicks += 1;
-    document.getElementById("notClicks").innerHTML = notClicks;
-    loadRandomFromList();
+    document.getElementById("hotClicker").disabled = true;
+    document.getElementById("notClicker").disabled = true;
+    document.getElementById("notClicks").innerHTML = (document.getElementById("notClicks").innerHTML * 1 + 1);
+    fetch("/set/" + selected + "?not=1")
+      .then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        //console.log(json);
+      });
+    setTimeout(loadRandomFromList, 350);
 };
 
 loadRandomFromList();
