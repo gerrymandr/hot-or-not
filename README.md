@@ -1,8 +1,6 @@
 # District Hot or Not page
 
-## Quickstart
-
-[Visit the tutorial online](http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/). The rest of the project is provided just to show the functioning finished results. The tutorial will show you how to build all of this stuff, from downloading Node all the way to the end.
+# <a href="http://hot-or-not-district.herokuapp.com/">Hot-or-Not Districts</a>
 
 ## Basic setup
 
