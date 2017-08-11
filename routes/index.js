@@ -2,16 +2,6 @@ var fs = require('fs');
 
 var express = require('express');
 var router = express.Router();
-const District = require('../models/district');
-
-var allImages = [];
-
-fs.readdir(__dirname + '/../public/images', function(err, items) {
-  if (err) {
-    throw err;
-  }
-  allImages = items;
-});
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -72,54 +62,5 @@ router.post('/adduser', function(req, res) {
         }
     });
 });
-
-router.get('/voteson/:district_name', (req, res) => {
-  District.findOne({ filename: req.params.district_name }, (err, district) => {
-    if (err) {
-      return res.json(err);
-    }
-    if (district) {
-      res.json([district.hot, district.not]);
-    } else {
-      res.json([0, 0]);
-    }
-  });
-});
-
-router.get('/set/:district_name', (req, res) => {
-  District.findOne({ filename: req.params.district_name }, (err, district) => {
-    if (err) {
-      return res.json(err);
-    }
-    if (district) {
-      if (req.query.hot) {
-        district.hot++;
-        district.save((err) => {
-          if (err) {
-            return res.json(err);
-          }
-        });
-      }
-      if (req.query.not) {
-        district.not++;
-        district.save((err) => {
-          if (err) {
-            return res.json(err);
-          }
-        });
-      }
-    } else {
-      var d = new District({
-        hot: ((req.query.hot * 1) || 0),
-        not: ((req.query.not * 1) || 0),
-        filename: req.params.district_name
-      });
-      d.save((err) => {
-        return res.json({ success: 'true' });
-      });
-    }
-  });
-});
-
 
 module.exports = router;

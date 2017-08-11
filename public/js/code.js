@@ -6,20 +6,20 @@ function writeLine(fontSize, text) {
 
 var selected;
 function loadRandomFromList() {
-    //document.getElementById("hotClicks").attri = false;
-    //document.getElementById("notClicks").disabled = false;
     selected = geoidList[Math.floor(Math.random() * geoidList.length)];
-    show_image('/images/' + selected, 200, 200, "Google");
-    document.getElementById("hotClicker").disabled = false;
-    document.getElementById("notClicker").disabled = false;
-    $.get("/voteson/" + selected, function(json) {
+    show_image('/images/' + selected, 200, 200, "Google", function() {
+      document.getElementById("hotClicker").disabled = false;
+      document.getElementById("notClicker").disabled = false;
+      $.get("/voteson/" + selected, function(json) {
         document.getElementById("hotClicks").innerHTML = json[0];
         document.getElementById("notClicks").innerHTML = json[1];
       });
+    });
 }
 
-function show_image(src, width, height, alt) {
+function show_image(src, width, height, alt, callback) {
     var img = document.getElementById("myImage");
+    img.onload = callback;
     img.src = src;
     img.width = width;
     img.height = height;

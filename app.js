@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var compression = require('compression');
+var fs = require('fs');
 
 //const compression = require('compression');
 const mongoose = require('mongoose');
@@ -27,11 +29,72 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(compression());
+
+const District = require('./models/district');
+
+var allImages = [];
+fs.readdir(__dirname + '/public/images', function(err, items) {
+  if (err) {
+    throw err;
+  }
+  allImages = items;
+});
 
 //app.use(compression);
-app.use('/', routes);
+app.get('/', (req, res) => {
+  res.render('index', {
+      title: 'Hot or Not',
+      allImages: allImages
+  });
+});
 
-app.use('/users', users);
+app.get('/voteson/:district_name', (req, res) => {
+  District.findOne({ filename: req.params.district_name }, (err, district) => {
+    if (err) {
+      return res.json(err);
+    }
+    if (district) {
+      res.json([district.hot, district.not]);
+    } else {
+      res.json([0, 0]);
+    }
+  });
+});
+
+app.get('/set/:district_name', (req, res) => {
+  console.log('setting');
+  District.findOne({ filename: req.params.district_name }, (err, district) => {
+    console.log('checking if found');
+    if (err) {
+      return res.json(err);
+    }
+    console.log('has district? ' + district);
+    if (district) {
+      if (req.query.hot) {
+        district.hot++;
+        district.save((err) => {
+          return res.json(err || {});
+        });
+      }
+      if (req.query.not) {
+        district.not++;
+        district.save((err) => {
+          return res.json(err || {});
+        });
+      }
+    } else {
+      var d = new District({
+        hot: ((req.query.hot * 1) || 0),
+        not: ((req.query.not * 1) || 0),
+        filename: req.params.district_name
+      });
+      d.save((err) => {
+        return res.json(err || { success: 'true' });
+      });
+    }
+  });
+});
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
