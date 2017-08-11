@@ -1,9 +1,23 @@
+var fs = require('fs');
+
 var express = require('express');
 var router = express.Router();
 
+var allImages = [];
+
+fs.readdir(__dirname + '/../public/images', function(err, items) {
+  if (err) {
+    throw err;
+  }
+  allImages = items;
+});
+
 /* GET home page. */
 router.get('/', function(req, res) {
-    res.render('index', { title: 'Express' });
+  res.render('index', {
+      title: 'Hot or Not',
+      allImages: allImages
+  });
 });
 
 /* GET Hello World page. */
